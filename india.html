@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Covid19</title>
+
+	<!-- Latest compiled and minified CSS -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- <style type="text/css">
+  .main{
+    margin-top: 30px;
+  }
+  .state{
+/*  margin-left: 50px;
+    /*margin-right: 20px;*/
+    padding-right: 10px;
+    padding-left: 10px;
+    display: flex;  
+    flex-wrap: wrap;
+  }
+  .navbar{
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-right: 100px;
+  }
+</style> -->
+</head>
+<body>
+
+<div class="container-fluid main  text-center w-100 " >
+	<!-- search not in navbar collapse -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark m-10 p-10" >
+    <div class="d-flex flex-grow-1">
+        <a href="/" class="navbar-brand">Search</a>
+        <form class="mr-2 my-auto w-100 d-inline-block order-1">
+            <div class="input-group">
+                <input type="text" class="form-control border border-right-0" placeholder="Enter State name..." id="myInput" onkeyup="myFunction()">
+            </div>
+        </form>
+    </div>
+    <button class="navbar-toggler order-0 search-btn" type="button" data-toggle="collapse" data-target="#navbar7">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse flex-shrink-1 flex-grow-0 order-last" id="navbar7">
+        <ul class="navbar-nav text-primary">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#"  id="state">India's-States</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="index.html" id="country">All-Country-details</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<!-- nav baar end -->
+  <h2 class="text-danger bold text-center p-10 m-5 ">COVID-19 LIVE UPDATES OF INDIA STATE</h2>
+ <!--  <p>The .table-dark class adds a black background to the table:</p> -->  
+
+ <div class="table-responsive-sm state">         
+  <table class="table table-dark table-striped w-auto table-responsive-sm" id="myTable">
+    <thead id="myHeader">
+      <tr>
+      	<th >Serial No.</th>
+        <th >LastUpDatedTime</th>
+        <th >All State</th>
+        <th >TotalConfirmed</th>
+        <th>Active</th>
+        <th >TotalRecovered</th>
+        <th >TotalDeaths</th>
+      </tr>
+    </thead>
+    <tbody  id="countries">
+      <tr>
+        
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>
+
+<script type="text/javascript">
+	async function alldata(){
+		try{
+		const jsonData= await fetch("https://api.covid19india.org/data.json");
+		const jsData = await jsonData.json();
+		console.log(jsData);
+
+		     var i=1;
+             while(i<189)
+		    {
+        	const mydata = jsData.statewise[`${i}`];
+        	// console.log(mydata);
+            var AllCountry = $(`
+            	                <tr>
+                                <td>${i}</td>
+            	                <td>${mydata.lastupdatedtime}</td>
+            	                <td>${mydata.state}</td>
+            	                <td>${mydata.confirmed}</td> 
+            	                <td>${mydata.active}</td>
+            	                <td>${mydata.recovered}</td>
+            	                <td>${mydata.deaths}</td>
+            	                </tr>`);
+            $("#countries tr:last").after(AllCountry);
+            i++; 
+        }
+      
+
+      }catch(error){
+     console.log(`The Error is : ${error}`);
+    }
+}
+alldata();
+
+function myFunction() {
+
+  var input;
+  var filter;
+  var table;  
+  var tr; 
+  var td;
+  var i;
+  var txtValue;
+  input = document.getElementById("myInput");
+
+  filter = input.value.toUpperCase();
+
+  table = document.getElementById("myTable");
+
+  tr = table.getElementsByTagName("tr");
+
+  for (i = 0; i < tr.length; i++) {
+
+    td = tr[i].getElementsByTagName("td")[2];
+
+    if (td) {
+
+      txtValue = td.textContent || td.innerText;
+
+      if (txtValue.toUpperCase().indexOf(filter) > -1) 
+      {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+
+</script>
+
+</body>
+</html>
